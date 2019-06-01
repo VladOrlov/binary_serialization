@@ -68,11 +68,18 @@ namespace orlov {
 
         auto get_id() const {
             std::string str;
-            return std::visit(visitor_options{
+            std::visit(visitor_options{
                     [&str](taxpayer_id_int_t arg) {
                         str = std::to_string(arg.get());
+                    },
+                    [&str](const std::string &arg) {
+                        str = arg;
+                    },
+                    [](std::monostate) {
+                        throw std::bad_variant_access(); // this should never happen
                     }
-            });
+            }, taxpayer_id_);
+            return str;
         }
 
         void set_discount_rate(discount_t::underlying_t value) {
