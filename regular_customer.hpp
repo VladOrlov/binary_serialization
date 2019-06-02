@@ -1,12 +1,15 @@
+#pragma once
+
+#include "ranged_value.hpp"
+#include "util.hpp"
+
 #include <cstdint>
 #include <limits>
 #include <string>
 #include <fstream>
 #include <vector>
-#include <iostream>
 
-#include "ranged_value.hpp"
-#include "util.hpp"
+#include <iostream>
 
 #include <cstdint>
 #include <limits>

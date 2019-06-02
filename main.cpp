@@ -1,7 +1,8 @@
+#include "purchase.hpp"
+#include "regular_customer.hpp"
+
 #include <iostream>
 #include <fstream>
-#include "regular_customer.hpp"
-#include "purchase.hpp"
 
 purchase getPurchaseToRead();
 
@@ -34,6 +35,8 @@ int main() {
             {"aspirin", 20, false}
     }};
 
+
+
     fstream file;
 
     // saving to th file
@@ -42,10 +45,11 @@ int main() {
         cout << "Error in creating file...\n";
         return -1;
     }
-    file.write((char *) &novus, sizeof(novus));
-    file.write((char *) &furshet, sizeof(furshet));
-    file.write((char *) &eko_lavka, sizeof(eko_lavka));
-    file.write((char *) &pharmacy, sizeof(pharmacy));
+
+    std::vector all_purchases = {novus, furshet, eko_lavka, pharmacy};
+    for (purchase p : all_purchases) {
+        file.write((char *) &novus, sizeof(novus));
+    }
 
     file.close();
     cout << "Date saved into file the file.\n";
@@ -57,16 +61,14 @@ int main() {
         return -1;
     }
 
-    purchase purchase_restored = getPurchaseToRead();
-
-    file.read((char *) &purchase_restored, sizeof(purchase_restored));
-    while (!file.eof()) {
+    do {
         purchase purchase_restored_1 = getPurchaseToRead();
         cout<<"Reading the file..."<<endl;
-//        vlad_from_file.display_regular_customer();
+
         file.read((char *) &purchase_restored_1, sizeof(purchase_restored_1));
         purchase_restored_1.print();
-    }
+    }while (!file.eof());
+
     cout << "Deserialization complete.\n";
     return 0;
 }

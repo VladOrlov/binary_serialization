@@ -85,34 +85,34 @@ namespace orlov {
         }
 
         void print() {
-            cout << "PURCHASE DETAILS: " << this->serialize() << endl;
+            cout << serialize() << endl;
         }
 
         static purchase deserialize(const std::string &str) {
             using namespace std::string_literals;
             auto members = split(str, "^");
             if (members.size() != 3) {
-                throw exception();
+//                throw illegal_customer_exception("cannot parse purchase: "s + str);
             }
 
             const auto &customer_str = members[0];
             auto customer_tokens = split(customer_str, "-");
             if (customer_tokens.size() != 2) {
-                throw exception();
+//                throw illegal_customer_exception("cannot parse customer: "s + customer_str);
             }
             regular_customer customer = regular_customer::deserialize(customer_tokens[1]);
 
             const auto &goods_str = members[1];
             auto goods_tokens = split(goods_str, "-");
             if (goods_tokens.size() != 2) {
-                throw exception();
+//                throw illegal_customer_exception("cannot parse goods: "s + goods_str);
             }
             goods_list goods = deserialize_goods(goods_tokens[1]);
 
             const auto &paid_str = members[2];
             auto paid_tokens = split(paid_str, ":");
             if (paid_tokens.size() != 2) {
-                throw exception();
+//                throw illegal_customer_exception("cannot parse price paid: "s + paid_str);
             }
             price_t::underlying_t paid;
             std::istringstream(paid_tokens[1]) >> paid;
