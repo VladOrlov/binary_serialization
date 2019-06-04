@@ -115,6 +115,32 @@ namespace orlov {
             return str;
         }
 
+        std::unique_ptr<char[]> serialize_binary() {
+            return orlov::to_bytes(this);
+        }
+
+        void serialize_binary(std::ofstream &ofile) {
+            ofile.write((char*) &taxpayer_id_, sizeof(taxpayer_id_));
+            ofile.write((char*) &amount_spent_, sizeof(amount_spent_));
+            ofile.write((char*) &discount_rate_, sizeof(discount_rate_));
+        }
+
+        static regular_customer deserialize_binary(void* bytes){
+            return orlov::from_bytes<regular_customer>(bytes);
+        }
+
+        static regular_customer deserialize_binary(std::ifstream &ifile){
+            taxpayer_id_t taxpayer_id;
+            amount_t amount_spent = 0;
+            discount_t discount_rate = 0;
+
+            ifile.read((char *) &taxpayer_id, sizeof(taxpayer_id));
+            ifile.read((char *) &amount_spent, sizeof(amount_spent));
+            ifile.read((char *) &discount_rate, sizeof(discount_rate));
+
+            return regular_customer{taxpayer_id, amount_spent, discount_rate};
+        }
+
         std::string serialize() const {
             std::string taxpayer_id_marker{};
             std::visit(visitor_options{
